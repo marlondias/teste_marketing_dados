@@ -17,6 +17,8 @@
   - POST /webhook: Recebe dados de um webhook fictício (ex: simulando o Facebook Ads) e atualiza a tabela metricas.
   - GET /campanhas/:id/metricas: Retorna as métricas consolidadas em JSON (incluindo cálculos de CTR/CPA).
 
+- Terminar o docker compose para também incluir o NodeJS.
+
 ## Opcionais
 
 - Bônus (opcional): use Axios para consumir uma API externa fictícia (ex: https://api.ads-fake.com/data).

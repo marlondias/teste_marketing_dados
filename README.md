@@ -1,6 +1,6 @@
 # Teste prático para empresa de Marketing
 
-## Instruções
+## Escopo do projeto
 
 Criar um sistema para análise de campanhas digitais com integração em tempo real.
 
@@ -36,3 +36,13 @@ Criar um microssistema que:
 3. Integre via API (JavaScript) para simular atualizações em tempo real.
 
 (Ver [TO-DOs](./TO-DO.md) para mais detalhes)
+
+## Instalação
+
+1) Instale o Docker em sua máquina.
+
+2) Na raiz do projeto, execute `docker compose up` e aguarde.
+
+3) Acesse a aplicação em [localhost](http://localhost:3000/openapi).
+
+4) Para acessar a base de dados, use a porta 5432 (PortgreSQL).
