@@ -10,6 +10,7 @@ import { WebhookController } from './controllers/WebhookController';
 import { MetricsService } from './services/MetricsService';
 import { MockDataService } from './services/MockDataService';
 import { CampaignStatsService } from './services/CampaignStatsService';
+import { ReportGeneratorService } from './services/ReportGeneratorService';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { CampaignStatsService } from './services/CampaignStatsService';
     MetricsService,
     MockDataService,
     CampaignStatsService,
+    ReportGeneratorService,
   ],
 })
 export class AppModule {}
