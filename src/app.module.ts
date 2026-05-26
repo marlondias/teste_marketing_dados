@@ -8,6 +8,7 @@ import { CampaignsController } from './controllers/CampaignsController';
 import { CampaignsService } from './services/CampaignsService';
 import { WebhookController } from './controllers/WebhookController';
 import { MetricsService } from './services/MetricsService';
+import { MockDataService } from './services/MockDataService';
 
 @Module({
   imports: [
@@ -22,12 +23,13 @@ import { MetricsService } from './services/MetricsService';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         entities: [Campanha, Metrica],
-        synchronize: true,
+        synchronize: false,
       }),
       inject: [ConfigService],
     }),
+    TypeOrmModule.forFeature([Campanha, Metrica]),
   ],
   controllers: [CampaignsController, WebhookController, AppController],
-  providers: [CampaignsService, MetricsService],
+  providers: [CampaignsService, MetricsService, MockDataService],
 })
 export class AppModule {}
