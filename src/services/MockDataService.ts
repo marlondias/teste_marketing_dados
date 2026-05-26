@@ -3,7 +3,7 @@ import { fakerPT_BR as faker } from '@faker-js/faker';
 import { Injectable } from '@nestjs/common';
 import { Metrica } from 'typeORM/entities/Metrica';
 
-const MIN_STARTING_DATE = new Date('2020-01-01');
+const MIN_STARTING_DATE = new Date('2025-01-01');
 const MAX_STARTING_DATE = new Date('2026-01-01');
 
 const MIN_BUDGET = 100;
