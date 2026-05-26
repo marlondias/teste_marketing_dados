@@ -4,7 +4,7 @@ campanhas_com_totais AS (
 		c.id AS campanha_id, 
 		c.orcamento,
 		SUM(m.custo_por_clique * m.cliques) AS custo_total,
-		SUM(m.conversoes) * (:valor_produto)::numeric AS receita,
+		SUM(m.conversoes) * ($1)::numeric AS receita,
 		COUNT(m.id) AS quant_metricas,
 		SUM(m.impressoes) AS total_impressoes,
 		SUM(m.cliques) AS total_cliques, 
