@@ -42,6 +42,7 @@ export class MockDataService {
       data_fim: endDate,
       orcamento: faker.number.float({ min: MIN_BUDGET, max: MAX_BUDGET }),
       nome: nameParts.join(' '),
+      metricas: [],
     };
   }
 
@@ -75,6 +76,7 @@ export class MockDataService {
       impressoes: impressions,
       cliques: clicks,
       conversoes: conversions,
+      campanha: campaign,
     };
   }
 

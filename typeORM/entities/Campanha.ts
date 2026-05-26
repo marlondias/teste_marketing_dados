@@ -19,5 +19,5 @@ export class Campanha {
   orcamento: number;
 
   @OneToMany(() => Metrica, (metrica) => metrica.campanha)
-  metricas?: Metrica[];
+  metricas: Metrica[];
 }
