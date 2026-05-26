@@ -4,7 +4,7 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { getQueryContents } from 'typeORM/queryLoader';
 
-type CampaignStats = {
+export type CampaignStats = {
   campanha_id: number;
   orcamento: number;
   custo_total: number;
@@ -43,9 +43,7 @@ export class CampaignStatsService {
       campaignId,
     ]);
 
-    return rows
-      .map((r) => this.mapRowToCampaignStats(r))
-      .filter((s) => s.campanha_id === campaignId)[0];
+    return rows.map((r) => this.mapRowToCampaignStats(r))[0];
   }
 
   async getManyCampaignStats(): Promise<CampaignStats[]> {
