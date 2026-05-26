@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Query,
+  StreamableFile,
 } from '@nestjs/common';
 import { CampaignsService } from 'src/services/CampaignsService';
 import {
@@ -24,6 +25,8 @@ import {
 } from '@nestjs/swagger';
 import { MetricsService } from 'src/services/MetricsService';
 import { getMetricDtoFromEntity } from './DTOs/MetricsDTOs';
+import { CampaignStatsService } from 'src/services/CampaignStatsService';
+import { ReportGeneratorService } from 'src/services/ReportGeneratorService';
 
 @ApiTags('campaigns')
 @Controller('campaigns')
@@ -31,6 +34,8 @@ export class CampaignsController {
   constructor(
     private readonly campaignsService: CampaignsService,
     private readonly metricsService: MetricsService,
+    private readonly campaignStatsService: CampaignStatsService,
+    private readonly reportGeneratorService: ReportGeneratorService,
   ) {}
 
   @Post('/mocks')
@@ -88,11 +93,34 @@ export class CampaignsController {
     status: 200,
     description: 'Métricas consolidadas da campanha em arquivo JSON ou CSV.',
   })
-  getMetricsForOne(
+  async getMetricsForOne(
     @Param('id') id: number,
     @Query('type') type: 'json' | 'csv',
-  ): string {
-    // TODO: Retorna as métricas consolidadas em JSON ou CSV (incluindo cálculos de CTR/CPA).
-    return 'OK'; //FIXME
+  ): Promise<StreamableFile> {
+    const campaign = await this.campaignsService.getOne(id);
+    const campaignStats =
+      await this.campaignStatsService.getSingleCampaignStats(id);
+    const metrics = await this.metricsService.getAllByCampaign(campaign.id);
+
+    const isJsonOutput = type === 'json';
+    const contentType = isJsonOutput ? 'application/json' : 'text/csv';
+    const filename = `campanha_${id}` + (isJsonOutput ? '.json' : '.csv');
+
+    const dataStream = isJsonOutput
+      ? await this.reportGeneratorService.generateCampaignReportAsJson(
+          campaign,
+          campaignStats,
+          metrics,
+        )
+      : await this.reportGeneratorService.generateCampaignReportAsCsv(
+          campaign,
+          campaignStats,
+          metrics,
+        );
+
+    return new StreamableFile(dataStream, {
+      type: contentType,
+      disposition: `attachment; filename="${filename}"`,
+    });
   }
 }
