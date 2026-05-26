@@ -9,6 +9,7 @@ import { CampaignsService } from './services/CampaignsService';
 import { WebhookController } from './controllers/WebhookController';
 import { MetricsService } from './services/MetricsService';
 import { MockDataService } from './services/MockDataService';
+import { CampaignStatsService } from './services/CampaignStatsService';
 
 @Module({
   imports: [
@@ -30,6 +31,11 @@ import { MockDataService } from './services/MockDataService';
     TypeOrmModule.forFeature([Campanha, Metrica]),
   ],
   controllers: [CampaignsController, WebhookController, AppController],
-  providers: [CampaignsService, MetricsService, MockDataService],
+  providers: [
+    CampaignsService,
+    MetricsService,
+    MockDataService,
+    CampaignStatsService,
+  ],
 })
 export class AppModule {}
