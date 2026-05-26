@@ -44,7 +44,7 @@ export class CampaignsService {
 
   async getAll(): Promise<Campanha[]> {
     return this.campanhaRepository.find({
-      order: { nome: 'ASC' },
+      order: { id: 'ASC' },
     });
   }
 
