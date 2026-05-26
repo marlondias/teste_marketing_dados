@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Metrica } from 'typeORM/entities/Metrica';
 import { MockDataService } from './MockDataService';
 import { Campanha } from 'typeORM/entities/Campanha';
+import { getDifferenceInDays } from 'src/utils/DateUtils';
 
 const MAX_AMOUNT_OF_MOCK_METRICS = 100;
 
@@ -16,7 +17,7 @@ export class MetricsService {
   ) {}
 
   async insertMocks(campaign: Campanha): Promise<number[]> {
-    const campaignDurationInDays = this.getDifferenceInDays(
+    const campaignDurationInDays = getDifferenceInDays(
       campaign.data_inicio,
       campaign.data_fim,
     );
@@ -47,11 +48,5 @@ export class MetricsService {
       where: { campanha_id: campaignId },
       order: { data_metrica: 'ASC' },
     });
-  }
-
-  private getDifferenceInDays(date1: Date, date2: Date): number {
-    const dayInMs = 1000 * 60 * 60 * 24;
-    const diffInMs: number = Math.abs(date2.getTime() - date1.getTime());
-    return Math.ceil(diffInMs / dayInMs);
   }
 }
