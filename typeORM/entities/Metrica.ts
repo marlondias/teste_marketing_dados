@@ -33,5 +33,5 @@ export class Metrica {
 
   @ManyToOne(() => Campanha, { nullable: false })
   @JoinColumn({ name: 'campanha_id' })
-  campanha: Campanha;
+  campanha?: Campanha;
 }

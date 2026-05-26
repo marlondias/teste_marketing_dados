@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Metrica } from './Metrica';
 
 @Entity('campanhas')
 export class Campanha {
@@ -16,4 +17,7 @@ export class Campanha {
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   orcamento: number;
+
+  @OneToMany(() => Metrica, (metrica) => metrica.campanha)
+  metricas?: Metrica[];
 }
