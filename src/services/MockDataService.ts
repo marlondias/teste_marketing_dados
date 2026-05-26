@@ -77,4 +77,30 @@ export class MockDataService {
       conversoes: conversions,
     };
   }
+
+  generateManyCampaigns(amount: number): Campanha[] {
+    if (!Number.isFinite(amount) || amount < 1) {
+      throw Error('Invalid amount of campaigns to generate.');
+    }
+
+    const mocks: Campanha[] = [];
+    for (let i = 0; i < amount; i++) {
+      mocks.push(this.generateCampaign());
+    }
+
+    return mocks;
+  }
+
+  generateManyMetrics(campaign: Campanha, amount: number): Metrica[] {
+    if (!Number.isFinite(amount) || amount < 1) {
+      throw Error('Invalid amount of metrics to generate.');
+    }
+
+    const mocks: Metrica[] = [];
+    for (let i = 0; i < amount; i++) {
+      mocks.push(this.generateMetric(campaign));
+    }
+
+    return mocks;
+  }
 }
