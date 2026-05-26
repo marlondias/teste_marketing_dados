@@ -2,24 +2,17 @@ import { Campanha } from 'typeORM/entities/Campanha';
 import { fakerPT_BR as faker } from '@faker-js/faker';
 import { Injectable } from '@nestjs/common';
 import { Metrica } from 'typeORM/entities/Metrica';
+import { getDateWithAddedDays, getDifferenceInDays } from 'src/utils/DateUtils';
 
-const MIN_STARTING_DATE = new Date('2025-01-01');
-const MAX_STARTING_DATE = new Date('2026-01-01');
-
-const MIN_BUDGET = 100;
+const MIN_STARTING_DATE = new Date('2026-01-01');
+const MAX_STARTING_DATE = new Date('2026-05-01');
+const MIN_BUDGET = 1000;
 const MAX_BUDGET = 1000000;
-
-const MIN_IMPRESSIONS = 100;
-const MAX_IMPRESSIONS = 10000;
-
-const MIN_CLICK_FACTOR = 0.4;
+const MIN_COST_PER_CLICK = 0.01;
+const MAX_COST_PER_CLICK = 1;
+const MAX_IMPRESSIONS = 100000;
 const MAX_CLICK_FACTOR = 0.8;
-
-const MIN_CONVERSION_FACTOR = 0.2;
 const MAX_CONVERSION_FACTOR = 0.6;
-
-const MIN_COST_PER_CLICK = 0.1;
-const MAX_COST_PER_CLICK = 10;
 
 @Injectable()
 export class MockDataService {
@@ -32,8 +25,9 @@ export class MockDataService {
     const endDate = faker.date.between({ from: startDate, to: currentDate });
     const nameParts = [
       faker.commerce.productAdjective(),
-      faker.science.chemicalElement().name,
-      faker.food.fruit(),
+      faker.food.dish(),
+      'by',
+      faker.music.artist(),
     ];
 
     return {
@@ -43,40 +37,6 @@ export class MockDataService {
       orcamento: faker.number.float({ min: MIN_BUDGET, max: MAX_BUDGET }),
       nome: nameParts.join(' '),
       metricas: [],
-    };
-  }
-
-  generateMetric(campaign: Campanha): Metrica {
-    const impressions = faker.number.int({
-      min: MIN_IMPRESSIONS,
-      max: MAX_IMPRESSIONS,
-    });
-    const clicks = Math.floor(
-      faker.number.float({ min: MIN_CLICK_FACTOR, max: MAX_CLICK_FACTOR }) *
-        impressions,
-    );
-    const conversions = Math.floor(
-      faker.number.float({
-        min: MIN_CONVERSION_FACTOR,
-        max: MAX_CONVERSION_FACTOR,
-      }) * clicks,
-    );
-
-    return {
-      id: Number.NaN,
-      campanha_id: campaign.id,
-      data_metrica: faker.date.between({
-        from: campaign.data_inicio,
-        to: campaign.data_fim,
-      }),
-      custo_por_clique: faker.number.float({
-        min: MIN_COST_PER_CLICK,
-        max: MAX_COST_PER_CLICK,
-      }),
-      impressoes: impressions,
-      cliques: clicks,
-      conversoes: conversions,
-      campanha: campaign,
     };
   }
 
@@ -93,16 +53,79 @@ export class MockDataService {
     return mocks;
   }
 
-  generateManyMetrics(campaign: Campanha, amount: number): Metrica[] {
-    if (!Number.isFinite(amount) || amount < 1) {
-      throw Error('Invalid amount of metrics to generate.');
+  generateManyMetrics(campaign: Campanha): Metrica[] {
+    const campaignDurationInDays = getDifferenceInDays(
+      campaign.data_inicio,
+      campaign.data_fim,
+    );
+    let remainingBudget = campaign.orcamento;
+    const metrics: Metrica[] = [];
+
+    for (let i = 0; i < campaignDurationInDays; i++) {
+      const metric = this.generateMetric(campaign, remainingBudget, i);
+      remainingBudget -= metric.custo_por_clique * metric.cliques;
+      metrics.push(metric);
     }
 
-    const mocks: Metrica[] = [];
-    for (let i = 0; i < amount; i++) {
-      mocks.push(this.generateMetric(campaign));
+    return metrics;
+  }
+
+  private generateMetric(
+    campaign: Campanha,
+    remainingBudget: number,
+    daysSinceCampaignStarted: number,
+  ): Metrica {
+    const dateOfMeasurement = getDateWithAddedDays(
+      campaign.data_inicio,
+      daysSinceCampaignStarted,
+    );
+
+    const costPerClick = faker.number.float({
+      min: MIN_COST_PER_CLICK,
+      max: MAX_COST_PER_CLICK,
+    });
+
+    /* Mesmo sendo fictícia, a métrica não deve trazer informações inconsistentes com sua campanha.
+     * Uma dessas inconsistências seria gastar mais em clicks do que o orçamento da campanha permitiria.
+     * Para evitar isso, a quantidade de clicks é dependente do orçamento restante.
+     * Quando acaba o orçamento de campanha, cessam os clicks, simulando a realidade.
+     */
+    const maxAffordableClicks = Math.floor(remainingBudget / costPerClick);
+    if (maxAffordableClicks < 1) {
+      return {
+        id: Number.NaN,
+        campanha_id: campaign.id,
+        data_metrica: dateOfMeasurement,
+        custo_por_clique: costPerClick,
+        impressoes: 0,
+        cliques: 0,
+        conversoes: 0,
+        campanha: campaign,
+      };
     }
 
-    return mocks;
+    /* Outra inconsistência seria ter uma quantidade de clicks maior que as impressões naquele anúncio.
+     * Para evitar isso, há uma hierarquia nos valores: "impressoes > cliques > conversões".
+     */
+    const impressions = faker.number.int({
+      max: Math.min(maxAffordableClicks, MAX_IMPRESSIONS),
+    });
+    const clicks = Math.floor(
+      faker.number.float({ max: MAX_CLICK_FACTOR }) * impressions,
+    );
+    const conversions = Math.floor(
+      faker.number.float({ max: MAX_CONVERSION_FACTOR }) * clicks,
+    );
+
+    return {
+      id: Number.NaN,
+      campanha_id: campaign.id,
+      data_metrica: dateOfMeasurement,
+      custo_por_clique: costPerClick,
+      impressoes: impressions,
+      cliques: clicks,
+      conversoes: conversions,
+      campanha: campaign,
+    };
   }
 }

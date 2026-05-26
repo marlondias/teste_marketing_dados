@@ -4,9 +4,6 @@ import { Repository } from 'typeorm';
 import { Metrica } from 'typeORM/entities/Metrica';
 import { MockDataService } from './MockDataService';
 import { Campanha } from 'typeORM/entities/Campanha';
-import { getDifferenceInDays } from 'src/utils/DateUtils';
-
-const MAX_AMOUNT_OF_MOCK_METRICS = 100;
 
 @Injectable()
 export class MetricsService {
@@ -17,20 +14,7 @@ export class MetricsService {
   ) {}
 
   async insertMocks(campaign: Campanha): Promise<number[]> {
-    const campaignDurationInDays = getDifferenceInDays(
-      campaign.data_inicio,
-      campaign.data_fim,
-    );
-
-    const amountOfMetrics = Math.min(
-      campaignDurationInDays,
-      MAX_AMOUNT_OF_MOCK_METRICS,
-    );
-
-    const metrics = this.mockDataService.generateManyMetrics(
-      campaign,
-      amountOfMetrics,
-    );
+    const metrics = this.mockDataService.generateManyMetrics(campaign);
 
     metrics.forEach((m) => {
       if (!Number.isFinite(m.id)) {
