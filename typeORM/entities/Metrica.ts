@@ -4,7 +4,6 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
-  RelationId,
 } from 'typeorm';
 import { Campanha } from './Campanha';
 
@@ -13,7 +12,7 @@ export class Metrica {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @RelationId((metrica: Metrica) => metrica.campanha)
+  @Column({ type: 'integer' })
   campanha_id: number;
 
   @Column({ type: 'date' })
@@ -31,7 +30,11 @@ export class Metrica {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   custo_por_clique: number;
 
-  @ManyToOne(() => Campanha, { nullable: false })
+  @ManyToOne(() => Campanha, {
+    nullable: false,
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'campanha_id' })
-  campanha?: Campanha;
+  campanha: Campanha;
 }
