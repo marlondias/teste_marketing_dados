@@ -11,27 +11,27 @@ import { Campanha } from './Campanha';
 @Entity('metricas')
 export class Metrica {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column({ type: 'integer' })
   @Index()
-  campanha_id: number;
+  campanha_id!: number;
 
   @Column({ type: 'date' })
   @Index()
-  data_metrica: Date;
+  data_metrica!: Date;
 
   @Column({ type: 'integer' })
-  impressoes: number;
+  impressoes!: number;
 
   @Column({ type: 'integer' })
-  cliques: number;
+  cliques!: number;
 
   @Column({ type: 'integer' })
-  conversoes: number;
+  conversoes!: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  custo_por_clique: number;
+  custo_por_clique!: number;
 
   @ManyToOne(() => Campanha, {
     nullable: false,
@@ -39,5 +39,5 @@ export class Metrica {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'campanha_id' })
-  campanha: Campanha;
+  campanha!: Campanha;
 }

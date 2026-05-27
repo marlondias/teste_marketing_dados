@@ -2,13 +2,13 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Metrica } from 'typeORM/entities/Metrica';
 
 export class MetricsDTO {
-  @ApiProperty()
+  @ApiProperty({ type: 'integer' })
   id: number;
 
-  @ApiProperty()
+  @ApiProperty({ type: 'integer' })
   campaignId: number;
 
-  @ApiProperty()
+  @ApiProperty({ format: 'date' })
   dateOfMeasurement: Date;
 
   @ApiProperty()
@@ -26,7 +26,7 @@ export class MetricsDTO {
 
 export function getMetricDtoFromEntity(entity: Metrica): MetricsDTO {
   return {
-    id: entity.id,
+    id: entity.id ?? Number.NaN,
     campaignId: entity.campanha_id,
     impressions: entity.impressoes,
     clicks: entity.cliques,

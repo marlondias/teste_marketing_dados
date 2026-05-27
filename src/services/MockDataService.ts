@@ -31,7 +31,6 @@ export class MockDataService {
     ];
 
     return {
-      id: Number.NaN,
       data_inicio: startDate,
       data_fim: endDate,
       orcamento: faker.number.float({ min: MIN_BUDGET, max: MAX_BUDGET }),
@@ -93,8 +92,7 @@ export class MockDataService {
     const maxAffordableClicks = Math.floor(remainingBudget / costPerClick);
     if (maxAffordableClicks < 1) {
       return {
-        id: Number.NaN,
-        campanha_id: campaign.id,
+        campanha_id: campaign.id ?? Number.NaN,
         data_metrica: dateOfMeasurement,
         custo_por_clique: costPerClick,
         impressoes: 0,
@@ -118,8 +116,7 @@ export class MockDataService {
     );
 
     return {
-      id: Number.NaN,
-      campanha_id: campaign.id,
+      campanha_id: campaign.id ?? Number.NaN,
       data_metrica: dateOfMeasurement,
       custo_por_clique: costPerClick,
       impressoes: impressions,

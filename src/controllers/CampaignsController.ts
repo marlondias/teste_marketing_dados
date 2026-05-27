@@ -66,7 +66,10 @@ export class CampaignsController {
   @ApiResponse({ status: 200, type: GetCampaignResponseDTO })
   async getOne(@Param('id') id: number): Promise<GetCampaignResponseDTO> {
     const campaign = await this.campaignsService.getOne(id);
-    const metrics = await this.metricsService.getAllByCampaign(campaign.id);
+    const metrics = await this.metricsService.getAllByCampaign(
+      campaign.id ?? Number.NaN,
+    );
+
     return {
       campaign: getCampaignDtoFromEntity(campaign),
       metrics: metrics.map(getMetricDtoFromEntity),
@@ -84,7 +87,9 @@ export class CampaignsController {
     const campaign = await this.campaignsService.getOne(id);
     const campaignStats =
       await this.campaignStatsService.getSingleCampaignStats(id);
-    const metrics = await this.metricsService.getAllByCampaign(campaign.id);
+    const metrics = await this.metricsService.getAllByCampaign(
+      campaign.id ?? Number.NaN,
+    );
 
     const dataStream = this.reportGeneratorService.generateCampaignReportAsJson(
       campaign,

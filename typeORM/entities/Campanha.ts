@@ -4,20 +4,20 @@ import { Metrica } from './Metrica';
 @Entity('campanhas')
 export class Campanha {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column({ length: 100 })
-  nome: string;
+  nome!: string;
 
   @Column({ type: 'date' })
-  data_inicio: Date;
+  data_inicio!: Date;
 
   @Column({ type: 'date' })
-  data_fim: Date;
+  data_fim!: Date;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  orcamento: number;
+  orcamento!: number;
 
   @OneToMany(() => Metrica, (metrica) => metrica.campanha)
-  metricas: Metrica[];
+  metricas!: Metrica[];
 }

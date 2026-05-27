@@ -15,16 +15,9 @@ export class MetricsService {
 
   async insertMocks(campaign: Campanha): Promise<number[]> {
     const metrics = this.mockDataService.generateManyMetrics(campaign);
-
-    metrics.forEach((m) => {
-      if (!Number.isFinite(m.id)) {
-        delete (m as any).id;
-      }
-    });
-
     const insertedMetrics = await this.metricaRepository.save(metrics);
 
-    return insertedMetrics.map((metric) => metric.id);
+    return insertedMetrics.map((metric) => metric.id ?? Number.NaN);
   }
 
   async getAllByCampaign(campaignId: number): Promise<Metrica[]> {

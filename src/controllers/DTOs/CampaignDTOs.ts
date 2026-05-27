@@ -22,7 +22,7 @@ export class CampaignDTO {
 
 export function getCampaignDtoFromEntity(entity: Campanha): CampaignDTO {
   return {
-    id: entity.id,
+    id: entity.id ?? Number.NaN,
     name: entity.nome,
     startDate: entity.data_inicio,
     endDate: entity.data_fim,

@@ -20,18 +20,13 @@ export class CampaignsService {
     }
 
     const campaigns = this.mockDataService.generateManyCampaigns(amount);
-    campaigns.forEach((c) => {
-      if (!Number.isFinite(c.id)) {
-        delete (c as any).id;
-      }
-    });
     const insertedCampaigns = await this.campanhaRepository.save(campaigns);
 
     for (let i = 0; i < insertedCampaigns.length; i++) {
       await this.metricsService.insertMocks(insertedCampaigns[i]);
     }
 
-    return insertedCampaigns.map((campaign) => campaign.id);
+    return insertedCampaigns.map((campaign) => campaign.id ?? Number.NaN);
   }
 
   async delete(campaignId: number): Promise<void> {
