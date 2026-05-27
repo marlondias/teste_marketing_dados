@@ -8,18 +8,21 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 import { CampaignsService } from 'src/services/CampaignsService';
-import {
-  CreateCampaignMocksRequestDTO,
-  CreateCampaignMocksResponseDTO,
-  GetAllCampaignsResponseDTO,
-  getCampaignDtoFromEntity,
-  GetCampaignResponseDTO,
-} from './DTOs/CampaignDTOs';
-import { ApiBody, ApiResponse, ApiTags, ApiParam } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { MetricsService } from 'src/services/MetricsService';
-import { getMetricDtoFromEntity } from './DTOs/MetricsDTOs';
 import { CampaignStatsService } from 'src/services/CampaignStatsService';
 import { ReportGeneratorService } from 'src/services/ReportGeneratorService';
+import { CampanhaCreateMocksRequest } from './DTOs/RequestDTOs';
+import {
+  CampanhaCreateMocksResponse,
+  CampanhaGetAllResponse,
+  CampanhaGetOneResponse,
+} from './DTOs/ResponseDTOs';
+import {
+  getCampaignDtoFromEntity,
+  getDetailedCampaignDtoFromEntity,
+  getMetricDtoFromEntity,
+} from './DTOs/EntityDTOs';
 
 @ApiTags('campanhas')
 @Controller('campanhas')
@@ -32,68 +35,53 @@ export class CampanhasController {
   ) {}
 
   @Post('/mocks')
-  @ApiBody({ type: CreateCampaignMocksRequestDTO })
-  @ApiResponse({ status: 200, type: CreateCampaignMocksResponseDTO })
   async createMocks(
-    @Body() body: CreateCampaignMocksRequestDTO,
-  ): Promise<CreateCampaignMocksResponseDTO> {
-    if (!Number.isFinite(body.amount) || body.amount < 1) {
-      throw Error('Invalid amount of mocks to create.');
-    }
-
+    @Body() body: CampanhaCreateMocksRequest,
+  ): Promise<CampanhaCreateMocksResponse> {
     const ids = await this.campaignsService.insertMocks(body.amount);
-    return { newCampaignIds: ids };
+    return { ids };
   }
 
   @Delete('/:id')
-  @ApiParam({ name: 'id', description: 'ID da campanha', type: Number })
   @ApiResponse({ status: 204 })
   async delete(@Param('id') id: number): Promise<void> {
     await this.campaignsService.delete(id);
   }
 
   @Get()
-  @ApiResponse({ status: 200, type: GetAllCampaignsResponseDTO })
-  async getAll(): Promise<GetAllCampaignsResponseDTO> {
+  async getAll(): Promise<CampanhaGetAllResponse> {
     const campaigns = await this.campaignsService.getAll();
     return {
-      campaigns: campaigns.map(getCampaignDtoFromEntity),
+      campanhas: campaigns.map(getCampaignDtoFromEntity),
     };
   }
 
   @Get('/:id')
-  @ApiParam({ name: 'id', description: 'ID da campanha', type: Number })
-  @ApiResponse({ status: 200, type: GetCampaignResponseDTO })
-  async getOne(@Param('id') id: number): Promise<GetCampaignResponseDTO> {
+  async getOne(@Param('id') id: number): Promise<CampanhaGetOneResponse> {
     const campaign = await this.campaignsService.getOne(id);
-    const metrics = await this.metricsService.getAllByCampaign(
-      campaign.id ?? Number.NaN,
-    );
+    const stats = await this.campaignStatsService.getSingleCampaignStats(id);
+    const metrics = await this.metricsService.getAllByCampaign(id);
 
     return {
-      campaign: getCampaignDtoFromEntity(campaign),
-      metrics: metrics.map(getMetricDtoFromEntity),
+      campanha: getDetailedCampaignDtoFromEntity(campaign, stats),
+      metricas: metrics.map(getMetricDtoFromEntity),
     };
   }
 
   @Get('/:id/metricas')
-  @ApiParam({ name: 'id', description: 'ID da campanha', type: Number })
   @ApiResponse({
     status: 200,
     type: 'application/json',
-    description: 'Métricas consolidadas da campanha em arquivo JSON.',
+    description: 'Arquivo JSON contendo métricas e cálculos sobre a campanha.',
   })
   async getMetricsForOne(@Param('id') id: number): Promise<StreamableFile> {
     const campaign = await this.campaignsService.getOne(id);
-    const campaignStats =
-      await this.campaignStatsService.getSingleCampaignStats(id);
-    const metrics = await this.metricsService.getAllByCampaign(
-      campaign.id ?? Number.NaN,
-    );
+    const stats = await this.campaignStatsService.getSingleCampaignStats(id);
+    const metrics = await this.metricsService.getAllByCampaign(id);
 
     const dataStream = this.reportGeneratorService.generateCampaignReportAsJson(
       campaign,
-      campaignStats,
+      stats,
       metrics,
     );
 
