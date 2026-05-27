@@ -11,7 +11,6 @@ campanhas_com_totais AS (
 		SUM(m.conversoes) AS total_conversoes
 	FROM campanhas c 
 	LEFT JOIN metricas m ON c.id = m.campanha_id
-	WHERE ($2::integer IS NULL) OR $2::integer = c.id
 	GROUP BY c.id
 ),
 campanhas_com_calculos AS (
@@ -29,9 +28,6 @@ campanhas_com_calculos AS (
 )
 
 SELECT
-	c.*,
-	CASE 
-		WHEN ($2::integer IS NULL) THEN (roi = MAX(roi) OVER())::boolean
-    ELSE FALSE 
-	END AS is_melhor_roi
+  c.*,
+  (roi = MAX(roi) OVER())::boolean AS is_melhor_roi
 FROM campanhas_com_calculos c

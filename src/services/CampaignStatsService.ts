@@ -40,17 +40,17 @@ export class CampaignStatsService {
     const query = await getQueryContents('getCampaignsStats');
     const rows = await this.dataSource.query<Record<string, any>[]>(query, [
       this.productSellCost,
-      campaignId,
     ]);
 
-    return rows.map((r) => this.mapRowToCampaignStats(r))[0];
+    return rows
+      .filter((r) => Number(r.campanha_id) === campaignId)
+      .map((r) => this.mapRowToCampaignStats(r))[0];
   }
 
   async getManyCampaignStats(): Promise<CampaignStats[]> {
     const query = await getQueryContents('getCampaignsStats');
     const rows = await this.dataSource.query<Record<string, any>[]>(query, [
       this.productSellCost,
-      null,
     ]);
 
     return rows.map((r) => this.mapRowToCampaignStats(r));

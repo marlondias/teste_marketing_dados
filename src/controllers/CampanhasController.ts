@@ -50,8 +50,16 @@ export class CampanhasController {
   @Get()
   async getAll(): Promise<CampanhaGetAllResponse> {
     const campaigns = await this.campaignsService.getAll();
+    const statsByCampaigns =
+      await this.campaignStatsService.getManyCampaignStats();
+
     return {
-      campanhas: campaigns.map(getCampaignDtoFromEntity),
+      campanhas: campaigns.map((campaign) => {
+        const campaignStats = statsByCampaigns.filter(
+          (s) => s.campanha_id === campaign.id,
+        )[0];
+        return getCampaignDtoFromEntity(campaign, campaignStats);
+      }),
     };
   }
 

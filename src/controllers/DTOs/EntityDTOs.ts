@@ -8,6 +8,7 @@ export class CampaignDTO {
   data_inicio!: Date;
   data_fim!: Date;
   orcamento!: number;
+  is_melhor_roi!: boolean;
 }
 
 export class DetailedCampaignDTO extends CampaignDTO {
@@ -30,19 +31,27 @@ export class MetricDTO {
   custo_por_clique!: number;
 }
 
-export function getCampaignDtoFromEntity(campaign: Campanha): CampaignDTO {
+export function getCampaignDtoFromEntity(
+  campaign: Campanha,
+  stats: CampaignStats,
+): CampaignDTO {
   const { id, ...props } = campaign;
-  return { id: id ?? Number.NaN, ...props };
+  const { is_melhor_roi } = stats;
+  return {
+    id: id ?? Number.NaN,
+    is_melhor_roi,
+    ...props,
+  };
 }
 
 export function getDetailedCampaignDtoFromEntity(
   campaign: Campanha,
   stats: CampaignStats,
 ): DetailedCampaignDTO {
-  const { campanha_id, orcamento, is_melhor_roi, ...statsProps } = stats;
+  const { campanha_id, orcamento, ...statsProps } = stats;
 
   return {
-    ...getCampaignDtoFromEntity(campaign),
+    ...getCampaignDtoFromEntity(campaign, stats),
     ...statsProps,
   };
 }
