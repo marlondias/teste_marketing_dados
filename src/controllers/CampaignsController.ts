@@ -5,7 +5,6 @@ import {
   Get,
   Param,
   Post,
-  Query,
   StreamableFile,
 } from '@nestjs/common';
 import { CampaignsService } from 'src/services/CampaignsService';
@@ -16,13 +15,7 @@ import {
   getCampaignDtoFromEntity,
   GetCampaignResponseDTO,
 } from './DTOs/CampaignDTOs';
-import {
-  ApiBody,
-  ApiResponse,
-  ApiTags,
-  ApiParam,
-  ApiQuery,
-} from '@nestjs/swagger';
+import { ApiBody, ApiResponse, ApiTags, ApiParam } from '@nestjs/swagger';
 import { MetricsService } from 'src/services/MetricsService';
 import { getMetricDtoFromEntity } from './DTOs/MetricsDTOs';
 import { CampaignStatsService } from 'src/services/CampaignStatsService';
@@ -82,45 +75,26 @@ export class CampaignsController {
 
   @Get('/:id/metricas')
   @ApiParam({ name: 'id', description: 'ID da campanha', type: Number })
-  @ApiQuery({
-    name: 'type',
-    description: 'Formato do arquivo de resposta (JSON ou CSV)',
-    enum: ['json', 'csv'],
-    required: true,
-    example: 'json',
-  })
   @ApiResponse({
     status: 200,
-    description: 'Métricas consolidadas da campanha em arquivo JSON ou CSV.',
+    type: 'application/json',
+    description: 'Métricas consolidadas da campanha em arquivo JSON.',
   })
-  async getMetricsForOne(
-    @Param('id') id: number,
-    @Query('type') type: 'json' | 'csv',
-  ): Promise<StreamableFile> {
+  async getMetricsForOne(@Param('id') id: number): Promise<StreamableFile> {
     const campaign = await this.campaignsService.getOne(id);
     const campaignStats =
       await this.campaignStatsService.getSingleCampaignStats(id);
     const metrics = await this.metricsService.getAllByCampaign(campaign.id);
 
-    const isJsonOutput = type === 'json';
-    const contentType = isJsonOutput ? 'application/json' : 'text/csv';
-    const filename = `campanha_${id}` + (isJsonOutput ? '.json' : '.csv');
-
-    const dataStream = isJsonOutput
-      ? await this.reportGeneratorService.generateCampaignReportAsJson(
-          campaign,
-          campaignStats,
-          metrics,
-        )
-      : await this.reportGeneratorService.generateCampaignReportAsCsv(
-          campaign,
-          campaignStats,
-          metrics,
-        );
+    const dataStream = this.reportGeneratorService.generateCampaignReportAsJson(
+      campaign,
+      campaignStats,
+      metrics,
+    );
 
     return new StreamableFile(dataStream, {
-      type: contentType,
-      disposition: `attachment; filename="${filename}"`,
+      type: 'application/json',
+      disposition: `attachment; filename="campanha_${id}.json"`,
     });
   }
 }

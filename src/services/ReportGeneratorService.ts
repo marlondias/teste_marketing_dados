@@ -3,7 +3,6 @@ import { Campanha } from 'typeORM/entities/Campanha';
 import { Metrica } from 'typeORM/entities/Metrica';
 import { CampaignStats } from './CampaignStatsService';
 import { Readable } from 'stream';
-import * as fastcsv from 'fast-csv';
 
 type CampaignForReport = Omit<Campanha, 'metricas'> &
   Omit<CampaignStats, 'campanha_id' | 'orcamento' | 'is_melhor_roi'>;
@@ -19,23 +18,15 @@ type JsonReportPayload = {
 export class ReportGeneratorService {
   constructor() {}
 
-  async generateCampaignReportAsJson(
+  generateCampaignReportAsJson(
     campaign: Campanha,
     campaignStats: CampaignStats,
     metrics: Metrica[],
-  ): Promise<Readable> {
+  ): Readable {
     const reportPayload = this.getJsonPayload(campaign, campaignStats, metrics);
     const jsonString = JSON.stringify(reportPayload, null, 2);
 
     return Readable.from([jsonString]);
-  }
-
-  async generateCampaignReportAsCsv(
-    campaign: Campanha,
-    campaignStats: CampaignStats,
-    metrics: Metrica[],
-  ): Promise<Readable> {
-    throw new Error('Not implemented'); //FIXME
   }
 
   private getJsonPayload(
@@ -54,14 +45,5 @@ export class ReportGeneratorService {
         return props;
       }),
     };
-  }
-
-  private getCsvPayload(
-    campaign: Campanha,
-    campaignStats: CampaignStats,
-    metrics: Metrica[],
-  ): void {
-    const { campanha } = this.getJsonPayload(campaign, campaignStats, []);
-    //TODO: incompleto
   }
 }
