@@ -5,6 +5,8 @@ import { Campanha } from 'typeORM/entities/Campanha';
 import { MockDataService } from './MockDataService';
 import { MetricsService } from './MetricsService';
 
+type CampaignToInsert = Omit<Campanha, 'id' | 'metricas'>;
+
 @Injectable()
 export class CampaignsService {
   constructor(
@@ -27,6 +29,18 @@ export class CampaignsService {
     }
 
     return insertedCampaigns.map((campaign) => campaign.id ?? Number.NaN);
+  }
+
+  async insert(newCampaign: CampaignToInsert): Promise<number> {
+    if (newCampaign.nome.trim() !== newCampaign.nome) {
+      throw new Error('Campaign name cannot begin or end with spaces.');
+    }
+    if (newCampaign.data_inicio > newCampaign.data_fim) {
+      throw new Error('Campaign starting date cannot be after the end date.');
+    }
+    const insertedCampaign = await this.campanhaRepository.save(newCampaign);
+
+    return insertedCampaign.id ?? Number.NaN;
   }
 
   async delete(campaignId: number): Promise<void> {

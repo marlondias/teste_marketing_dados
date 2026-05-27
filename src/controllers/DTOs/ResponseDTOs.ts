@@ -13,6 +13,6 @@ export class CampanhaGetAllResponse {
   campanhas!: CampaignDTO[];
 }
 
-export class WebhookAddExternalMetricResponse {
+export class CreatedIdResponse {
   id!: number;
 }

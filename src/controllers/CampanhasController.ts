@@ -12,11 +12,15 @@ import { ApiResponse } from '@nestjs/swagger';
 import { MetricsService } from 'src/services/MetricsService';
 import { CampaignStatsService } from 'src/services/CampaignStatsService';
 import { ReportGeneratorService } from 'src/services/ReportGeneratorService';
-import { CampanhaCreateMocksRequest } from './DTOs/RequestDTOs';
+import {
+  CampanhaCreateMocksRequest,
+  CampanhaCreateRequest,
+} from './DTOs/RequestDTOs';
 import {
   CampanhaCreateMocksResponse,
   CampanhaGetAllResponse,
   CampanhaGetOneResponse,
+  CreatedIdResponse,
 } from './DTOs/ResponseDTOs';
 import {
   getCampaignDtoFromEntity,
@@ -39,6 +43,14 @@ export class CampanhasController {
   ): Promise<CampanhaCreateMocksResponse> {
     const ids = await this.campaignsService.insertMocks(body.amount);
     return { ids };
+  }
+
+  @Post()
+  async create(
+    @Body() body: CampanhaCreateRequest,
+  ): Promise<CreatedIdResponse> {
+    const id = await this.campaignsService.insert(body);
+    return { id };
   }
 
   @Delete('/:id')

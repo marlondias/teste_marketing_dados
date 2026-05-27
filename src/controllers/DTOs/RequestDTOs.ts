@@ -5,6 +5,9 @@ import {
   IsNotEmpty,
   IsNumber,
   IsPositive,
+  IsString,
+  MaxLength,
+  MinLength,
 } from 'class-validator';
 
 export class CampanhaCreateMocksRequest {
@@ -13,6 +16,31 @@ export class CampanhaCreateMocksRequest {
   @IsInt()
   @IsPositive()
   amount!: number;
+}
+
+export class CampanhaCreateRequest {
+  @ApiProperty({ description: 'Título da campanha.' })
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(3)
+  @MaxLength(100)
+  nome!: string;
+
+  @ApiProperty({ description: 'Data de início da campanha.' })
+  @IsNotEmpty()
+  @IsISO8601({ strict: true })
+  data_inicio!: Date;
+
+  @ApiProperty({ description: 'Data de término da campanha.' })
+  @IsNotEmpty()
+  @IsISO8601({ strict: true })
+  data_fim!: Date;
+
+  @ApiProperty({ description: 'Valor total do orçamento para a campanha.' })
+  @IsNotEmpty()
+  @IsNumber({ maxDecimalPlaces: 2, allowNaN: false, allowInfinity: false })
+  @IsPositive()
+  orcamento!: number;
 }
 
 export class WebhookAddExternalMetricRequest {

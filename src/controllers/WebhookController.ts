@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { CampaignsService } from 'src/services/CampaignsService';
 import { MetricsService } from 'src/services/MetricsService';
 import { WebhookAddExternalMetricRequest } from './DTOs/RequestDTOs';
-import { WebhookAddExternalMetricResponse } from './DTOs/ResponseDTOs';
+import { CreatedIdResponse } from './DTOs/ResponseDTOs';
 
 @Controller('webhook')
 export class WebhookController {
@@ -14,7 +14,7 @@ export class WebhookController {
   @Post()
   async addExternalMetric(
     @Body() body: WebhookAddExternalMetricRequest,
-  ): Promise<WebhookAddExternalMetricResponse> {
+  ): Promise<CreatedIdResponse> {
     const campaign = await this.campaignsService.getOne(body.campanha_id);
     if (!campaign.id) {
       throw new Error('Invalid campaign ID to associate new metric.');
