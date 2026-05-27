@@ -5,7 +5,13 @@ import * as path from 'path';
 type ValidQueryNames = 'getCampaignsStats';
 
 function getQueryFilePath(queryName: ValidQueryNames): string {
-  return path.join(process.cwd(), 'typeORM', 'queries', `${queryName}.sql`);
+  return path.join(
+    process.cwd(),
+    'src',
+    'typeORM',
+    'queries',
+    `${queryName}.sql`,
+  );
 }
 
 export async function getQueryContents(
