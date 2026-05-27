@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './controllers/AppController';
-import { Campanha } from 'typeORM/entities/Campanha';
-import { Metrica } from 'typeORM/entities/Metrica';
+import { Campanha } from 'src/typeORM/entities/Campanha';
+import { Metrica } from 'src/typeORM/entities/Metrica';
 import { CampanhasController } from './controllers/CampanhasController';
 import { CampaignsService } from './services/CampaignsService';
 import { WebhookController } from './controllers/WebhookController';
@@ -11,7 +11,7 @@ import { MetricsService } from './services/MetricsService';
 import { MockDataService } from './services/MockDataService';
 import { CampaignStatsService } from './services/CampaignStatsService';
 import { ReportGeneratorService } from './services/ReportGeneratorService';
-import { CampaignStats } from 'typeORM/entities/CampaignStats';
+import { CampaignStats } from 'src/typeORM/entities/CampaignStats';
 
 @Module({
   imports: [

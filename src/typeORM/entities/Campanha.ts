@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Metrica } from './Metrica';
-import { decimalTransformer } from 'typeORM/valueTransformers';
+import { decimalTransformer } from '../valueTransformers';
 
 @Entity('campanhas')
 export class Campanha {

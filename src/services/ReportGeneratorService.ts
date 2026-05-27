@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Campanha } from 'typeORM/entities/Campanha';
-import { Metrica } from 'typeORM/entities/Metrica';
+import { Campanha } from 'src/typeORM/entities/Campanha';
+import { Metrica } from 'src/typeORM/entities/Metrica';
 import { Readable } from 'stream';
-import { CampaignStats } from 'typeORM/entities/CampaignStats';
+import { CampaignStats } from 'src/typeORM/entities/CampaignStats';
 
 type CampaignForReport = Omit<Campanha, 'metricas'> &
   Omit<CampaignStats, 'campanha_id' | 'is_melhor_roi'>;

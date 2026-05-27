@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { getDateAsYMD } from 'src/utils/DateUtils';
-import { CampaignStats } from 'typeORM/entities/CampaignStats';
-import { Campanha } from 'typeORM/entities/Campanha';
-import { Metrica } from 'typeORM/entities/Metrica';
+import { CampaignStats } from 'src/typeORM/entities/CampaignStats';
+import { Campanha } from 'src/typeORM/entities/Campanha';
+import { Metrica } from 'src/typeORM/entities/Metrica';
 
 export class CampaignDTO {
   @ApiProperty()

@@ -2,8 +2,8 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { CampaignStats } from 'typeORM/entities/CampaignStats';
-import { getQueryContents } from 'typeORM/queryLoader';
+import { CampaignStats } from 'src/typeORM/entities/CampaignStats';
+import { getQueryContents } from 'src/typeORM/queryLoader';
 
 @Injectable()
 export class CampaignStatsService {

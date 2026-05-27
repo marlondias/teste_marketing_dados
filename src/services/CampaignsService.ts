@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Campanha } from 'typeORM/entities/Campanha';
+import { Campanha } from 'src/typeORM/entities/Campanha';
 import { MockDataService } from './MockDataService';
 import { MetricsService } from './MetricsService';
 

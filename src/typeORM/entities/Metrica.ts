@@ -7,7 +7,7 @@ import {
   Index,
 } from 'typeorm';
 import { Campanha } from './Campanha';
-import { decimalTransformer } from 'typeORM/valueTransformers';
+import { decimalTransformer } from '../valueTransformers';
 
 @Entity('metricas')
 export class Metrica {

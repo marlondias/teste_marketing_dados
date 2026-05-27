@@ -1,7 +1,7 @@
-import { Campanha } from 'typeORM/entities/Campanha';
+import { Campanha } from 'src/typeORM/entities/Campanha';
 import { fakerPT_BR as faker } from '@faker-js/faker';
 import { Injectable } from '@nestjs/common';
-import { Metrica } from 'typeORM/entities/Metrica';
+import { Metrica } from 'src/typeORM/entities/Metrica';
 import { getDateWithAddedDays, getDifferenceInDays } from 'src/utils/DateUtils';
 
 const MIN_STARTING_DATE = new Date('2026-01-01');

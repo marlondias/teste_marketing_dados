@@ -6,29 +6,29 @@ import { Entity, Column, PrimaryColumn } from 'typeorm';
 })
 export class CampaignStats {
   @PrimaryColumn()
-  campanha_id: number;
+  campanha_id!: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  custo_total: number;
+  custo_total!: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  taxa_consumo_orcamento: number;
+  taxa_consumo_orcamento!: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  ctr: number;
+  ctr!: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  taxa_conversao: number;
+  taxa_conversao!: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  cpa: number;
+  cpa!: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  roas: number;
+  roas!: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  roi: number;
+  roi!: number;
 
   @Column()
-  is_melhor_roi: boolean;
+  is_melhor_roi!: boolean;
 }

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Metrica } from 'typeORM/entities/Metrica';
+import { Metrica } from 'src/typeORM/entities/Metrica';
 import { MockDataService } from './MockDataService';
-import { Campanha } from 'typeORM/entities/Campanha';
+import { Campanha } from 'src/typeORM/entities/Campanha';
 
 type MetricaToInsert = Omit<Metrica, 'id' | 'campanha'>;
 
