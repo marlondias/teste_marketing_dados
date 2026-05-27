@@ -29,5 +29,9 @@ campanhas_com_calculos AS (
 
 SELECT
   c.*,
-  (roi = MAX(roi) OVER())::boolean AS is_melhor_roi
+  CASE
+    WHEN c.roi IS NULL 
+    THEN FALSE 
+    ELSE (c.roi = MAX(roi) OVER())::boolean
+  END AS is_melhor_roi
 FROM campanhas_com_calculos c
