@@ -13,3 +13,7 @@ export function getDifferenceInDays(date1: Date, date2: Date): number {
   const diffInMs: number = Math.abs(date2.getTime() - date1.getTime());
   return Math.ceil(diffInMs / dayInMs);
 }
+
+export function getDateAsYMD(date: Date): string {
+  return date.toISOString().split('T')[0];
+}

@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   StreamableFile,
@@ -17,7 +19,7 @@ import {
   CampanhaCreateRequest,
 } from './DTOs/RequestDTOs';
 import {
-  CampanhaCreateMocksResponse,
+  CreatedIdsArrayResponse,
   CampanhaGetAllResponse,
   CampanhaGetOneResponse,
   CreatedIdResponse,
@@ -40,7 +42,7 @@ export class CampanhasController {
   @Post('/mocks')
   async createMocks(
     @Body() body: CampanhaCreateMocksRequest,
-  ): Promise<CampanhaCreateMocksResponse> {
+  ): Promise<CreatedIdsArrayResponse> {
     const ids = await this.campaignsService.insertMocks(body.amount);
     return { ids };
   }
@@ -49,12 +51,22 @@ export class CampanhasController {
   async create(
     @Body() body: CampanhaCreateRequest,
   ): Promise<CreatedIdResponse> {
-    const id = await this.campaignsService.insert(body);
+    const { nome, orcamento } = body;
+    const data_inicio = new Date(body.data_inicio);
+    const data_fim = new Date(body.data_fim);
+
+    const id = await this.campaignsService.insert({
+      nome,
+      orcamento,
+      data_inicio,
+      data_fim,
+    });
+
     return { id };
   }
 
   @Delete('/:id')
-  @ApiResponse({ status: 204 })
+  @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: number): Promise<void> {
     await this.campaignsService.delete(id);
   }

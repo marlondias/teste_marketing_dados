@@ -26,15 +26,15 @@ export class CampanhaCreateRequest {
   @MaxLength(100)
   nome!: string;
 
-  @ApiProperty({ description: 'Data de início da campanha.' })
+  @ApiProperty({ description: 'Data de início da campanha.', format: 'date' })
   @IsNotEmpty()
   @IsISO8601({ strict: true })
-  data_inicio!: Date;
+  data_inicio!: string;
 
-  @ApiProperty({ description: 'Data de término da campanha.' })
+  @ApiProperty({ description: 'Data de término da campanha.', format: 'date' })
   @IsNotEmpty()
   @IsISO8601({ strict: true })
-  data_fim!: Date;
+  data_fim!: string;
 
   @ApiProperty({ description: 'Valor total do orçamento para a campanha.' })
   @IsNotEmpty()
