@@ -7,6 +7,7 @@ import {
   Index,
 } from 'typeorm';
 import { Campanha } from './Campanha';
+import { decimalTransformer } from 'typeORM/valueTransformers';
 
 @Entity('metricas')
 export class Metrica {
@@ -30,7 +31,12 @@ export class Metrica {
   @Column({ type: 'integer' })
   conversoes!: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    transformer: decimalTransformer,
+  })
   custo_por_clique!: number;
 
   @ManyToOne(() => Campanha, {

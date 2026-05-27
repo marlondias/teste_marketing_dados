@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Metrica } from './Metrica';
+import { decimalTransformer } from 'typeORM/valueTransformers';
 
 @Entity('campanhas')
 export class Campanha {
@@ -15,7 +16,12 @@ export class Campanha {
   @Column({ type: 'date' })
   data_fim!: Date;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    transformer: decimalTransformer,
+  })
   orcamento!: number;
 
   @OneToMany(() => Metrica, (metrica) => metrica.campanha)
