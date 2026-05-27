@@ -21,9 +21,9 @@ import { getMetricDtoFromEntity } from './DTOs/MetricsDTOs';
 import { CampaignStatsService } from 'src/services/CampaignStatsService';
 import { ReportGeneratorService } from 'src/services/ReportGeneratorService';
 
-@ApiTags('campaigns')
-@Controller('campaigns')
-export class CampaignsController {
+@ApiTags('campanhas')
+@Controller('campanhas')
+export class CampanhasController {
   constructor(
     private readonly campaignsService: CampaignsService,
     private readonly metricsService: MetricsService,

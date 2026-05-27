@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './controllers/AppController';
 import { Campanha } from 'typeORM/entities/Campanha';
 import { Metrica } from 'typeORM/entities/Metrica';
-import { CampaignsController } from './controllers/CampaignsController';
+import { CampanhasController } from './controllers/CampanhasController';
 import { CampaignsService } from './services/CampaignsService';
 import { WebhookController } from './controllers/WebhookController';
 import { MetricsService } from './services/MetricsService';
@@ -31,7 +31,7 @@ import { ReportGeneratorService } from './services/ReportGeneratorService';
     }),
     TypeOrmModule.forFeature([Campanha, Metrica]),
   ],
-  controllers: [CampaignsController, WebhookController, AppController],
+  controllers: [CampanhasController, WebhookController, AppController],
   providers: [
     CampaignsService,
     MetricsService,
