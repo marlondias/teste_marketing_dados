@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Campanha } from 'typeORM/entities/Campanha';
 import { Metrica } from 'typeORM/entities/Metrica';
-import { CampaignStats } from './CampaignStatsService';
 import { Readable } from 'stream';
+import { CampaignStats } from 'typeORM/entities/CampaignStats';
 
 type CampaignForReport = Omit<Campanha, 'metricas'> &
-  Omit<CampaignStats, 'campanha_id' | 'orcamento' | 'is_melhor_roi'>;
+  Omit<CampaignStats, 'campanha_id' | 'is_melhor_roi'>;
 
 type MetricForReport = Omit<Metrica, 'campanha_id' | 'campanha'>;
 
@@ -35,8 +35,7 @@ export class ReportGeneratorService {
     metrics: Metrica[],
   ): JsonReportPayload {
     const { metricas, ...campaignProps } = campaign;
-    const { campanha_id, orcamento, is_melhor_roi, ...campaignStatsProps } =
-      campaignStats;
+    const { campanha_id, is_melhor_roi, ...campaignStatsProps } = campaignStats;
 
     return {
       campanha: { ...campaignProps, ...campaignStatsProps },

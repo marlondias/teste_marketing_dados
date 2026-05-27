@@ -11,6 +11,7 @@ import { MetricsService } from './services/MetricsService';
 import { MockDataService } from './services/MockDataService';
 import { CampaignStatsService } from './services/CampaignStatsService';
 import { ReportGeneratorService } from './services/ReportGeneratorService';
+import { CampaignStats } from 'typeORM/entities/CampaignStats';
 
 @Module({
   imports: [
@@ -24,12 +25,12 @@ import { ReportGeneratorService } from './services/ReportGeneratorService';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [Campanha, Metrica],
+        entities: [Campanha, Metrica, CampaignStats],
         synchronize: false,
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Campanha, Metrica]),
+    TypeOrmModule.forFeature([Campanha, Metrica, CampaignStats]),
   ],
   controllers: [CampanhasController, WebhookController, AppController],
   providers: [

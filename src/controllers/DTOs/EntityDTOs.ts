@@ -1,4 +1,4 @@
-import { CampaignStats } from 'src/services/CampaignStatsService';
+import { CampaignStats } from 'typeORM/entities/CampaignStats';
 import { Campanha } from 'typeORM/entities/Campanha';
 import { Metrica } from 'typeORM/entities/Metrica';
 
@@ -48,7 +48,7 @@ export function getDetailedCampaignDtoFromEntity(
   campaign: Campanha,
   stats: CampaignStats,
 ): DetailedCampaignDTO {
-  const { campanha_id, orcamento, ...statsProps } = stats;
+  const { campanha_id, ...statsProps } = stats;
 
   return {
     ...getCampaignDtoFromEntity(campaign, stats),
