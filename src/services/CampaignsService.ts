@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Campanha } from 'src/typeORM/entities/Campanha';
@@ -18,7 +22,7 @@ export class CampaignsService {
 
   async insertMocks(amount: number): Promise<number[]> {
     if (!Number.isFinite(amount) || amount < 1) {
-      throw Error('Invalid amount of mocks.');
+      throw new BadRequestException('Invalid amount of mocks.');
     }
 
     const campaigns = this.mockDataService.generateManyCampaigns(amount);
@@ -33,10 +37,14 @@ export class CampaignsService {
 
   async insert(newCampaign: CampaignToInsert): Promise<number> {
     if (newCampaign.nome.trim() !== newCampaign.nome) {
-      throw new Error('Campaign name cannot begin or end with spaces.');
+      throw new BadRequestException(
+        'Campaign name cannot begin or end with spaces.',
+      );
     }
     if (newCampaign.data_inicio > newCampaign.data_fim) {
-      throw new Error('Campaign starting date cannot be after the end date.');
+      throw new BadRequestException(
+        'Campaign starting date cannot be after the end date.',
+      );
     }
     const insertedCampaign = await this.campanhaRepository.save(newCampaign);
 
@@ -45,7 +53,7 @@ export class CampaignsService {
 
   async delete(campaignId: number): Promise<void> {
     if (!Number.isFinite(campaignId) || campaignId < 1) {
-      throw Error('Invalid campaign id.');
+      throw new BadRequestException('Invalid campaign id.');
     }
 
     await this.campanhaRepository.delete(campaignId);
@@ -59,7 +67,7 @@ export class CampaignsService {
 
   async getOne(campaignId: number): Promise<Campanha> {
     if (!Number.isFinite(campaignId) || campaignId < 1) {
-      throw Error('Invalid campaign id.');
+      throw new BadRequestException('Invalid campaign id.');
     }
 
     const campaign = await this.campanhaRepository.findOne({
@@ -67,7 +75,7 @@ export class CampaignsService {
     });
 
     if (!campaign) {
-      throw Error('Campaign not found.');
+      throw new NotFoundException('Campaign not found.');
     }
 
     return campaign;

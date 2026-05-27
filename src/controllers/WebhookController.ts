@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { CampaignsService } from 'src/services/CampaignsService';
 import { MetricsService } from 'src/services/MetricsService';
 import { WebhookAddExternalMetricRequest } from './DTOs/RequestDTOs';
@@ -17,7 +17,9 @@ export class WebhookController {
   ): Promise<CreatedIdResponse> {
     const campaign = await this.campaignsService.getOne(body.campanha_id);
     if (!campaign.id) {
-      throw new Error('Invalid campaign ID to associate new metric.');
+      throw new BadRequestException(
+        'Invalid campaign ID to associate new metric.',
+      );
     }
 
     const { data_metrica, impressoes, cliques, conversoes, custo_por_clique } =

@@ -1,6 +1,6 @@
 import { Campanha } from 'src/typeORM/entities/Campanha';
 import { fakerPT_BR as faker } from '@faker-js/faker';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Metrica } from 'src/typeORM/entities/Metrica';
 import { getDateWithAddedDays, getDifferenceInDays } from 'src/utils/DateUtils';
 
@@ -41,7 +41,7 @@ export class MockDataService {
 
   generateManyCampaigns(amount: number): Campanha[] {
     if (!Number.isFinite(amount) || amount < 1) {
-      throw Error('Invalid amount of campaigns to generate.');
+      throw new BadRequestException('Invalid amount of campaigns to generate.');
     }
 
     const mocks: Campanha[] = [];
