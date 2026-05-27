@@ -5,6 +5,8 @@ import { Metrica } from 'typeORM/entities/Metrica';
 import { MockDataService } from './MockDataService';
 import { Campanha } from 'typeORM/entities/Campanha';
 
+type MetricaToInsert = Omit<Metrica, 'id' | 'campanha'>;
+
 @Injectable()
 export class MetricsService {
   constructor(
@@ -18,6 +20,11 @@ export class MetricsService {
     const insertedMetrics = await this.metricaRepository.save(metrics);
 
     return insertedMetrics.map((metric) => metric.id ?? Number.NaN);
+  }
+
+  async insert(newMetric: MetricaToInsert): Promise<number> {
+    const insertedMetric = await this.metricaRepository.save(newMetric);
+    return insertedMetric.id ?? Number.NaN;
   }
 
   async getAllByCampaign(campaignId: number): Promise<Metrica[]> {
