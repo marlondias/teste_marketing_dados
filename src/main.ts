@@ -16,9 +16,8 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Marketing API')
-    .setDescription('An API for Marketing needs.')
+    .setDescription('Usada para gerenciar dados de campanhas de Marketing.')
     .setVersion('1.0')
-    .addTag('marketing')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('openapi', app, documentFactory);

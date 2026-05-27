@@ -8,7 +8,7 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 import { CampaignsService } from 'src/services/CampaignsService';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse } from '@nestjs/swagger';
 import { MetricsService } from 'src/services/MetricsService';
 import { CampaignStatsService } from 'src/services/CampaignStatsService';
 import { ReportGeneratorService } from 'src/services/ReportGeneratorService';
@@ -24,7 +24,6 @@ import {
   getMetricDtoFromEntity,
 } from './DTOs/EntityDTOs';
 
-@ApiTags('campanhas')
 @Controller('campanhas')
 export class CampanhasController {
   constructor(
