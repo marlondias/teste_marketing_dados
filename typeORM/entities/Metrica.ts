@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  Index,
 } from 'typeorm';
 import { Campanha } from './Campanha';
 
@@ -13,9 +14,11 @@ export class Metrica {
   id: number;
 
   @Column({ type: 'integer' })
+  @Index()
   campanha_id: number;
 
   @Column({ type: 'date' })
+  @Index()
   data_metrica: Date;
 
   @Column({ type: 'integer' })

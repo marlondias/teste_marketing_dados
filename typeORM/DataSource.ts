@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 import { ConfigService } from '@nestjs/config';
 import { Campanha } from './entities/Campanha';
 import { Metrica } from './entities/Metrica';
+import { CreateTables1779852186558 } from './migrations/1779852186558-CreateTables';
 
 config({ path: '.env' });
 const configService = new ConfigService();
@@ -20,5 +21,5 @@ export const dataSource = new DataSource({
   entities: [Campanha, Metrica],
   migrationsTableName: 'zz_typeorm_migrations',
   migrationsTransactionMode: 'each',
-  migrations: [],
+  migrations: [CreateTables1779852186558],
 });
