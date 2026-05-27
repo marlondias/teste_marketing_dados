@@ -15,5 +15,5 @@ export function getDifferenceInDays(date1: Date, date2: Date): number {
 }
 
 export function getDateAsYMD(date: Date): string {
-  return date.toISOString().split('T')[0];
+  return new Date(date).toISOString().split('T')[0];
 }
