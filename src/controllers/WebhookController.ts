@@ -3,6 +3,7 @@ import { CampaignsService } from 'src/services/CampaignsService';
 import { MetricsService } from 'src/services/MetricsService';
 import { WebhookAddExternalMetricRequest } from './DTOs/RequestDTOs';
 import { CreatedIdResponse } from './DTOs/ResponseDTOs';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller('webhook')
 export class WebhookController {
@@ -12,6 +13,11 @@ export class WebhookController {
   ) {}
 
   @Post()
+  @ApiOperation({
+    summary: 'Incluir métrica a uma campanha',
+    description:
+      'Pode ser usado por ferramentas externas para incluir dados de métrica a uma campanha, identificada pelo "campanha_id".',
+  })
   async addExternalMetric(
     @Body() body: WebhookAddExternalMetricRequest,
   ): Promise<CreatedIdResponse> {

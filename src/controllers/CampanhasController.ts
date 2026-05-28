@@ -10,7 +10,7 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 import { CampaignsService } from 'src/services/CampaignsService';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { MetricsService } from 'src/services/MetricsService';
 import { CampaignStatsService } from 'src/services/CampaignStatsService';
 import { ReportGeneratorService } from 'src/services/ReportGeneratorService';
@@ -40,6 +40,11 @@ export class CampanhasController {
   ) {}
 
   @Post('/mocks')
+  @ApiOperation({
+    summary: 'Gerar campanhas fictícias',
+    description:
+      'Cria a quantidade desejada de campanhas fictícias. Cada campanha terá dados aleatórios (porém coerentes) e métricas diárias para todo seu período de duração.',
+  })
   async createMocks(
     @Body() body: CampanhaCreateMocksRequest,
   ): Promise<CreatedIdsArrayResponse> {
@@ -48,6 +53,7 @@ export class CampanhasController {
   }
 
   @Post()
+  @ApiOperation({ summary: 'Criar uma campanha com dados específicos.' })
   async create(
     @Body() body: CampanhaCreateRequest,
   ): Promise<CreatedIdResponse> {
@@ -67,11 +73,13 @@ export class CampanhasController {
 
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Excluir uma campanha.' })
   async delete(@Param('id') id: number): Promise<void> {
     await this.campaignsService.delete(id);
   }
 
   @Get()
+  @ApiOperation({ summary: 'Ver dados gerais sobre todas as campanhas.' })
   async getAll(): Promise<CampanhaGetAllResponse> {
     const campaigns = await this.campaignsService.getAll();
     const statsByCampaigns =
@@ -88,6 +96,7 @@ export class CampanhasController {
   }
 
   @Get('/:id')
+  @ApiOperation({ summary: 'Ver dados específicos sobre uma campanha.' })
   async getOne(@Param('id') id: number): Promise<CampanhaGetOneResponse> {
     const campaign = await this.campaignsService.getOne(id);
     const stats = await this.campaignStatsService.getSingleCampaignStats(id);
@@ -100,6 +109,7 @@ export class CampanhasController {
   }
 
   @Get('/:id/metricas')
+  @ApiOperation({ summary: 'Baixar relatório consolidado sobre uma campanha.' })
   @ApiResponse({
     status: 200,
     type: 'application/json',
