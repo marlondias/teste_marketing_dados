@@ -6,7 +6,7 @@
     "deleteOutDir": true,
     "assets": [
       {
-        "include": "src/typeORM/queries/*.sql",
+        "include": "typeORM/queries/*.sql",
         "watchAssets": true
       }
     ],

@@ -11,35 +11,72 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - marketing_api_net
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER}" ]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 10s
       timeout: 5s
       retries: 5
+
+  migration_runner:
+    build:
+      context: .
+      target: development
+    container_name: migration_runner
+    command: pnpm run typeorm migration:run
+    environment:
+      NODE_ENV: development
+      CI: true
+    env_file:
+      - .env
+    networks:
+      - marketing_api_net
+    depends_on:
+      postgres_db:
+        condition: service_healthy
 
   api_dev:
     build:
       context: .
       target: development
     container_name: api_dev
-    command: sh -c "pnpm run typeorm migration:run && pnpm start:dev"
+    command: pnpm start:dev
     ports:
       - "3000:3000"
     environment:
       NODE_ENV: development
       CI: true
-      DB_HOST: postgres_db
-      DB_PORT: 5432
-      DB_USERNAME: postgres
-      DB_PASSWORD: postgres
-      DB_NAME: marketing
-      CAMPAIGN_PRODUCT_SELL_COST: 100
+    env_file:
+      - .env
     volumes:
       - .:/app
-      - /app/node_modules
+    networks:
+      - marketing_api_net
     depends_on:
-      postgres_db:
-        condition: service_healthy
+      migration_runner:
+        condition: service_completed_successfully
+
+  api_prod:
+    build:
+      context: .
+      target: production
+    container_name: api_prod
+    ports:
+      - "3030:3000"
+    environment:
+      NODE_ENV: production
+    env_file:
+      - .env
+    networks:
+      - marketing_api_net
+    depends_on:
+      migration_runner:
+        condition: service_completed_successfully
 
 volumes:
   pgdata:
+
+networks:
+  marketing_api_net:
+    driver: bridge
