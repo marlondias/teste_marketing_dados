@@ -1,5 +1,5 @@
 services:
-  postgres:
+  postgres_db:
     image: postgres:17
     container_name: postgres_db
     restart: unless-stopped
@@ -9,9 +9,37 @@ services:
       POSTGRES_DB: marketing
     ports:
       - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER}" ]
       interval: 10s
       timeout: 5s
       retries: 5
 
+  api_dev:
+    build:
+      context: .
+      target: development
+    container_name: api_dev
+    command: sh -c "pnpm run typeorm migration:run && pnpm start:dev"
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      CI: true
+      DB_HOST: postgres_db
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: marketing
+      CAMPAIGN_PRODUCT_SELL_COST: 100
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
