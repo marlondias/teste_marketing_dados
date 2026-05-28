@@ -1,10 +1,10 @@
 {
   "name": "teste_empresa_marketing",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "version": "1.0.0",
+  "description": "Um sistema básico para gerenciamento de campanhas de marketing.",
+  "author": "Marlon Dias",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\"",
