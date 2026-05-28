@@ -34,9 +34,9 @@ Criar um sistema para análise de campanhas digitais com integração em tempo r
 
 3) Na raiz do projeto, há um arquivo chamado `.env.example`. Crie uma cópia dele com o nome `.env`.
 
-4) Para instalar o projeto na versão de **produção**, execute `docker compose up -d api_prod` e aguarde.
+4) Para instalar o projeto na versão de **produção**, execute `docker compose up --build -d api_prod` e aguarde.
 
-5) Para instalar o projeto na versão de **desenvolvimento**, execute `docker compose up -d api_dev` e aguarde.
+5) Para instalar o projeto na versão de **desenvolvimento**, execute `docker compose up --build -d api_dev` e aguarde.
 
 6) Pronto! Agora leia as instruções de uso.
 
@@ -47,6 +47,7 @@ Atenção: O arquivo `.env` já contém os valores corretos para execução loca
 O projeto cria uma base de dados PostgreSQL e uma API para interação com os dados das campanhas de marketing e suas métricas.
 
 Não é necessário executar qualquer comando específico, pois há uma interface visual que permite uso pelo navegador.
+
 Links para a interface Web:
 
 - [API de produção](http://localhost:3030/openapi).
@@ -63,3 +64,5 @@ Caso queira acessar a base de dados diretamente, use os seguintes parâmetros:
 - Porta: `5432`
 - Usuário: `postgres`
 - Senha: `postgres`
+
+Atenção: Caso seu gerenciador de BD execute de dentro de um container, o endereço `localhost` não será encontrado. Faça os ajustes necessários de acordo com seu ambiente.
