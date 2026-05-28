@@ -16,7 +16,6 @@ campanhas_com_totais AS (
 campanhas_com_calculos AS (
 	SELECT
 		c.campanha_id,
-		c.orcamento,
 		c.custo_total,
 		(c.custo_total / NULLIF(c.orcamento, 0)) * 100 AS taxa_consumo_orcamento,
 		(c.total_cliques::numeric / NULLIF(c.total_impressoes, 0)) * 100 AS ctr,

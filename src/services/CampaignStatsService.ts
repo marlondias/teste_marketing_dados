@@ -4,6 +4,7 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { CampaignStats } from 'src/typeORM/entities/CampaignStats';
 import { getQueryContents } from 'src/typeORM/queryLoader';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class CampaignStatsService {
@@ -39,6 +40,6 @@ export class CampaignStatsService {
       this.productSellCost,
     ]);
 
-    return this.dataSource.manager.create(CampaignStats, rawRows);
+    return plainToInstance(CampaignStats, rawRows);
   }
 }
