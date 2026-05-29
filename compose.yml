@@ -41,9 +41,10 @@ services:
       context: .
       target: development
     container_name: api_dev
-    command: pnpm start:dev
+    command: pnpm start:debug
     ports:
       - "3000:3000"
+      - "9229:9229"
     environment:
       NODE_ENV: development
       CI: true
@@ -51,7 +52,8 @@ services:
       - .env
     volumes:
       - .:/app
-      - /node_modules
+      - /app/.pnpm-store
+      - /app/node_modules
     networks:
       - marketing_api_net
     depends_on:
