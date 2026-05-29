@@ -40,7 +40,7 @@ Criar um sistema para análise de campanhas digitais com integração em tempo r
 
 6) Pronto! Agora leia as instruções de uso.
 
-Atenção: O arquivo `.env` já contém os valores corretos para execução local. Você pode alterá-lo se quiser, mas saiba que isso tem grande efeito sobre a execução do projeto.
+> Atenção: O arquivo `.env` já contém os valores corretos para execução local. Você pode alterá-lo se quiser, mas saiba que isso tem grande efeito sobre a execução do projeto.
 
 ## Uso
 
@@ -65,4 +65,24 @@ Caso queira acessar a base de dados diretamente, use os seguintes parâmetros:
 - Usuário: `postgres`
 - Senha: `postgres`
 
-Atenção: Caso seu gerenciador de BD execute de dentro de um container, o endereço `localhost` não será encontrado. Faça os ajustes necessários de acordo com seu ambiente.
+> Atenção: Caso seu gerenciador de BD execute de dentro de um container, o endereço `localhost` não será encontrado. Faça os ajustes necessários de acordo com seu ambiente.
+
+## Indicadores chave (por campanha)
+
+**Custo total da campanha**: Valor total que realmente foi gasto pela campanha durante seu período de vigência.
+
+**Taxa de consumo do orçamento**: Porcentagem do orçamento de campanha que foi consumida.
+
+**Click-through Rate (CTR)**: Porcentagem das impressões que resultaram em clique.
+
+**Taxa de conversão**: Porcentagem dos cliques que resultaram em conversão.
+
+**Custo de aquisição (CPA)**: Valor médio gasto para obter uma conversão.
+
+**Receita**: Valor total obtido na campanha, considerando o preço de venda do produto e o total de unidades vendidas.
+
+**Return On Ad Investment (ROAS)**: Relação percentual entre o valor investido (gasto com cliques) e a receita obtida.
+
+**Return On Investment (ROI)**: Relação percentual entre o lucro e a receita.
+
+> No código fonte, há um [script SQL](./src/typeORM/queries/getCampaignsStats.sql) que calcula esses indicadores.
