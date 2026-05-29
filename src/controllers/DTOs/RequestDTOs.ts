@@ -6,6 +6,7 @@ import {
   IsNumber,
   IsPositive,
   IsString,
+  Max,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -15,6 +16,7 @@ export class CampanhaCreateMocksRequest {
   @IsNotEmpty()
   @IsInt()
   @IsPositive()
+  @Max(1000)
   amount!: number;
 }
 
